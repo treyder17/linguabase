@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+:root {
+  --bg-deep: #0B1B33;
+  --bg-surface: #132A4D;
+  --bg-surface-2: #1B3A63;
+  --line: #24406B;
+  --action: #3B82F6;
+  --action-hover: #5B9AFB;
+  --ice: #8FD3FF;
+  --text: #EDF2FA;
+  --text-muted: #93A7C7;
+  --danger: #F87171;
+  --success: #4ADE80;
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+html, body {
+  background: var(--bg-deep);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+@keyframes wave-flow {
+  0% { stroke-dashoffset: 24; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.signal-wave path {
+  animation: wave-flow 1.2s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signal-wave path { animation: none; }
+}
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: var(--action);
+  color: var(--bg-deep);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ice);
+  outline-offset: 2px;
+}
+

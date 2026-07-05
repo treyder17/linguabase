@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  passwordHash  String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  apiKeys       ApiKey[]
+  translations  Translation[]
+}
+
+model ApiKey {
+  id          String    @id @default(cuid())
+  name        String
+  // Only a hash of the key is stored. The plaintext key is shown once at creation.
+  keyHash     String    @unique
+  // Short, non-secret prefix shown in the UI so users can tell keys apart, e.g. "tpk_ab12"
+  prefix      String
+  lastUsedAt  DateTime?
+  revokedAt   DateTime?
+  createdAt   DateTime  @default(now())
+
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  requests    Translation[]
+
+  @@index([userId])
+}
+
+model Translation {
+  id             String    @id @default(cuid())
+  sourceLang     String
+  targetLang     String
+  domain         String    @default("general")
+  sourceText     String
+  translatedText String
+  charCount      Int
+  createdAt      DateTime  @default(now())
+
+  userId         String?
+  user           User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  apiKeyId       String?
+  apiKey         ApiKey?   @relation(fields: [apiKeyId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([apiKeyId])
+}
