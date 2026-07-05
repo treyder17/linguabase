@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { DOMAINS } from "@/lib/engine/domains";
 
+// Zwingt Next.js dazu, diese Seite dynamisch zur Laufzeit zu rendern (löst den Vercel-Build-Fehler)
+export const dynamic = "force-dynamic";
+
 export default function HomePage() {
   return (
     <div>
