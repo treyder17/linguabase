@@ -42,9 +42,14 @@ export class HttpNllbEngine implements TranslationEngine {
   constructor(private readonly serviceUrl: string) {}
 
   async translate(req: TranslateRequest): Promise<TranslateResult> {
+    const secret = process.env.INFERENCE_SERVICE_SECRET;
+
     const res = await fetch(`${this.serviceUrl}/translate`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(secret ? { Authorization: `Bearer ${secret}` } : {}),
+      },
       body: JSON.stringify(req),
     });
 
